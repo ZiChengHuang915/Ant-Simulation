@@ -7,6 +7,7 @@ let boardHeight = +localStorage.boardHeight;
 export class Colony {
     constructor() {
         let ants = [];
+        
     }
 
     generateAnts() {
@@ -16,9 +17,10 @@ export class Colony {
         }
     }
     
-    paintAnts(boardContext) {
+    paint(boardContext) {
         for (let ant of this.ants) {
-            ant.paint(boardContext);
+            ant.paintAnt(boardContext);
+            ant.paintTrail(boardContext);
         }
     }
     
