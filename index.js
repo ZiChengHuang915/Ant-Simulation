@@ -1,4 +1,5 @@
 import { Colony } from "./colony.js";
+import { FoodFactory } from "./food.js";
 
 const fps = 24;
 localStorage.setItem("boardWidth", "800");
@@ -12,14 +13,19 @@ const board = document.getElementById("board");
 const boardContext = board.getContext("2d");
 
 let colony;
+let foodFactory;
 setup();
 
 function setup() {
     colony = new Colony();
+    foodFactory = new FoodFactory();
+
     board.width = boardWidth;
     board.height = boardHeight;
+
     resetCanvas();
     colony.generateAnts();
+    foodFactory.generateFood();
     tick();
 }
 
@@ -35,6 +41,7 @@ function tick() {
         resetCanvas();
         colony.updatePositions();
         colony.paint(boardContext);
+        foodFactory.paintFoods(boardContext);
 
 
         tick();
