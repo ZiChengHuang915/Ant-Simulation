@@ -58,6 +58,7 @@ export class Ant {
 
             if (this.homeTrail.length == 0) {
                 this.hasFood = false;
+                localStorage.setItem("foodForaged", `${+localStorage.foodForaged + 1}`);
             } else {
                 let currentCoord = this.homeTrail.pop();
                 this.x = currentCoord.x;

@@ -1,6 +1,6 @@
 import { Ant } from "./ant.js";
 
-const numAnts = 1;
+const numAnts = 20;
 const colonyRadius = 30;
 const colonyColor = "brown";
 let boardWidth = +localStorage.boardWidth;

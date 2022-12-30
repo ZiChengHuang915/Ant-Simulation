@@ -1,9 +1,10 @@
 import { Colony } from "./colony.js";
 import { FoodFactory } from "./food.js";
 
-const fps = 24;
+const fps = 60;
 localStorage.setItem("boardWidth", "800");
 localStorage.setItem("boardHeight", "800");
+localStorage.setItem("foodForaged", "0");
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 const boardBorder = "black";
@@ -43,8 +44,12 @@ function tick() {
         colony.updatePositions(foodFactory);
         colony.paintAnts(boardContext);
         foodFactory.paintFoods(boardContext);
-
+        updateScore();
 
         tick();
     }, 1000 / fps);
+}
+
+export function updateScore() {
+    document.getElementById("score").innerHTML = localStorage.foodForaged;
 }
