@@ -5,6 +5,8 @@ const antRadius = 4;
 const topSpeed = 10;
 const maxRotationAngle = 50;
 const rotationChangeChance = 0.03;
+let boardWidth = +localStorage.boardWidth;
+let boardHeight = +localStorage.boardHeight;
 
 export class Ant {
     constructor(x, y, dx = topSpeed, dy = topSpeed, rotationAngle = 0) {
@@ -22,22 +24,35 @@ export class Ant {
         }
     }
 
+    updateMovement() {
+        // bounce off walls
+        if (this.x > boardWidth || this.x < 0) {
+            this.dx *= -1;
+        } else if (this.y > boardHeight || this.y < 0) {
+            this.dy *= -1;
+        }
+
+        this.changeRotationAngle();
+        this.updatePosition();
+    }
+
     updatePosition() {
         this.x += this.dx;
         this.y += this.dy;
     }
 
-    updateRotationAngle() {
-        if (Math.random() < rotationChangeChance) {
-            this.rotationAngle = Math.random() * degreesToRad(maxRotationAngle);
+    changeRotationAngle(forceChange = false) {
+        if (Math.random() < rotationChangeChance || forceChange) {
+            this.rotationAngle = Math.random() * degreesToRad(maxRotationAngle * 2) - degreesToRad(maxRotationAngle * 2) / 2;
             this.rotateVelocity();
-            console.log(this.rotationAngle);
         }
     }
 
     rotateVelocity() {
-        this.dx = this.dx * Math.cos(this.rotationAngle) - this.dy * Math.sin(this.rotationAngle);
-        this.dy = this.dx * Math.sin(this.rotationAngle) + this.dy * Math.cos(this.rotationAngle);
+        let x1 = this.dx;
+        let y1 = this.dy;
+        this.dx = x1 * Math.cos(this.rotationAngle) - y1 * Math.sin(this.rotationAngle);
+        this.dy = x1 * Math.sin(this.rotationAngle) + y1 * Math.cos(this.rotationAngle);
     }
 
     paint(boardContext) {

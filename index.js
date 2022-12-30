@@ -1,8 +1,10 @@
 import { Ant } from "./ant.js";
 
 const fps = 24;
-const boardWidth = 800;
-const boardHeight = 800;
+localStorage.setItem("boardWidth", "800");
+localStorage.setItem("boardHeight", "800");
+let boardWidth = +localStorage.boardWidth;
+let boardHeight = +localStorage.boardHeight;
 const boardBorder = "black";
 const boardBackground = "white";
 const antNumber = 1;
@@ -42,14 +44,7 @@ function paintAnts(boardContext) {
 
 function updatePositions() {
     for (let ant of ants) {
-        if (ant.x > boardWidth || ant.x < 0) {
-            ant.dx *= -1;
-        } else if (ant.y >boardHeight || ant.y < 0) {
-            ant.dy *= -1;
-        }
-
-        ant.updateRotationAngle();
-        ant.updatePosition();
+        ant.updateMovement();
     }
 }
 
