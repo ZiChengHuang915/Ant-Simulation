@@ -34,7 +34,7 @@ function tick() {
     setTimeout(function onTick() {
         resetCanvas();
         colony.updatePositions();
-        colony.paintAnts(boardContext);
+        colony.paint(boardContext);
 
 
         tick();

@@ -1,10 +1,12 @@
 import { degreesToRad } from "./util.js";
 
 const antColor = "black";
+const pheromoneTrailColor = "blue";
 const antRadius = 3;
-const topSpeed = 5;
+const trailRadius = 1;
+const topSpeed = 2;
 const maxRotationAngle = 20;
-const rotationChangeChance = 0.1;
+const rotationChangeChance = 0.3;
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
@@ -22,9 +24,17 @@ export class Ant {
         if (Math.random() < 0.5) {
             this.dy *= -1;
         }
+
+        this.pheromoneTrail = [];
     }
 
     updateMovement() {
+        let currentCoord = {
+            x: this.x,
+            y: this.y,
+        };
+        this.pheromoneTrail.push(currentCoord);
+
         // bounce off walls
         if (this.x > boardWidth || this.x < 0) {
             this.dx *= -1;
@@ -55,10 +65,20 @@ export class Ant {
         this.dy = x1 * Math.sin(this.rotationAngle) + y1 * Math.cos(this.rotationAngle);
     }
 
-    paint(boardContext) {
+    paintAnt(boardContext) {
         boardContext.strokeStyle = antColor;
         boardContext.beginPath();
         boardContext.ellipse(this.x, this.y, antRadius, antRadius, 0, 0, 360);
         boardContext.stroke();
+    }
+
+    paintTrail(boardContext) {
+        boardContext.strokeStyle = pheromoneTrailColor;
+        for (let point of this.pheromoneTrail) {
+            boardContext.beginPath();
+            boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
+            boardContext.stroke();
+        }
+        
     }
 }
