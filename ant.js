@@ -1,15 +1,15 @@
 import { degreesToRad } from "./util.js";
 
-const antColor = "green";
-const antRadius = 4;
-const topSpeed = 10;
-const maxRotationAngle = 50;
-const rotationChangeChance = 0.03;
+const antColor = "black";
+const antRadius = 3;
+const topSpeed = 5;
+const maxRotationAngle = 20;
+const rotationChangeChance = 0.1;
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
 export class Ant {
-    constructor(x, y, dx = topSpeed, dy = topSpeed, rotationAngle = 0) {
+    constructor(x, y, dx = topSpeed, dy = topSpeed, rotationAngle = Math.random() * degreesToRad(maxRotationAngle * 2) - degreesToRad(maxRotationAngle * 2) / 2) {
         this.x = x;
         this.y = y;
         this.dx = dx;
@@ -56,9 +56,9 @@ export class Ant {
     }
 
     paint(boardContext) {
+        boardContext.strokeStyle = antColor;
         boardContext.beginPath();
         boardContext.ellipse(this.x, this.y, antRadius, antRadius, 0, 0, 360);
-        boardContext.strokestyle = antColor;
         boardContext.stroke();
     }
 }
