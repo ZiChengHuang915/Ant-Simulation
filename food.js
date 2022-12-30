@@ -2,7 +2,8 @@ let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
 const foodColor = "green";
-let foodRadius = 20;
+localStorage.setItem("foodRadius", "20");
+let foodRadius = +localStorage.foodRadius;
 
 export class Food {
     constructor(x, y) {
@@ -21,7 +22,7 @@ export class Food {
 const numFood = 1;
 export class FoodFactory {
     constructor() {
-        let foods = [];
+        this.foods = [];
     }
 
     generateFood() {

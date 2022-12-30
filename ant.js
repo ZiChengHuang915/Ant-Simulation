@@ -1,3 +1,4 @@
+import { FoodFactory } from "./food.js";
 import { degreesToRad } from "./util.js";
 
 const antColor = "black";
@@ -26,24 +27,33 @@ export class Ant {
         }
 
         this.pheromoneTrail = [];
+        this.hasFood = false;
     }
 
     updateMovement() {
-        let currentCoord = {
-            x: this.x,
-            y: this.y,
-        };
-        this.pheromoneTrail.push(currentCoord);
+        // if (this.foundFood()) {
+        //     hasFood = true;
+        // }
 
-        // bounce off walls
-        if (this.x > boardWidth || this.x < 0) {
-            this.dx *= -1;
-        } else if (this.y > boardHeight || this.y < 0) {
-            this.dy *= -1;
+        if (!this.hasFood) {
+            let currentCoord = {
+                x: this.x,
+                y: this.y,
+            };
+            this.pheromoneTrail.push(currentCoord);
+
+            // bounce off walls
+            if (this.x > boardWidth || this.x < 0) {
+                this.dx *= -1;
+            } else if (this.y > boardHeight || this.y < 0) {
+                this.dy *= -1;
+            }
+
+            this.changeRotationAngle();
+            this.updatePosition();
+        } else {
+
         }
-
-        this.changeRotationAngle();
-        this.updatePosition();
     }
 
     updatePosition() {
@@ -79,6 +89,17 @@ export class Ant {
             boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
             boardContext.stroke();
         }
-        
+
+    }
+
+    foundFood(foodFactory) {
+        let foodRadius = +localStorage.foodRadius;
+        for (let food of foodFactory) {
+            if ((this.x - food.x) * (this.x - food.x) + (this.y - food.y) * (this.y - food.y) <= foodRadius * foodRadius) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
