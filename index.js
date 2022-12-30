@@ -40,7 +40,7 @@ function tick() {
     setTimeout(function onTick() {
         resetCanvas();
         colony.paint(boardContext);
-        colony.updatePositions();
+        colony.updatePositions(foodFactory);
         colony.paintAnts(boardContext);
         foodFactory.paintFoods(boardContext);
 

@@ -2,7 +2,7 @@ import { FoodFactory } from "./food.js";
 import { degreesToRad } from "./util.js";
 
 const antColor = "black";
-const pheromoneTrailColor = "blue";
+const homeTrailColor = "blue";
 const antRadius = 3;
 const trailRadius = 1;
 const topSpeed = 2;
@@ -26,21 +26,23 @@ export class Ant {
             this.dy *= -1;
         }
 
-        this.pheromoneTrail = [];
+        this.homeTrail = [];
         this.hasFood = false;
     }
 
-    updateMovement() {
-        // if (this.foundFood()) {
-        //     hasFood = true;
-        // }
+    updateMovement(foodFactory) {
+        if (this.foundFood(foodFactory)) {
+            this.hasFood = true;
+        }
 
         if (!this.hasFood) {
+            // should explore
+
             let currentCoord = {
                 x: this.x,
                 y: this.y,
             };
-            this.pheromoneTrail.push(currentCoord);
+            this.homeTrail.push(currentCoord);
 
             // bounce off walls
             if (this.x > boardWidth || this.x < 0) {
@@ -52,7 +54,15 @@ export class Ant {
             this.changeRotationAngle();
             this.updatePosition();
         } else {
+            // should return home with food
 
+            if (this.homeTrail.length == 0) {
+                this.hasFood = false;
+            } else {
+                let currentCoord = this.homeTrail.pop();
+                this.x = currentCoord.x;
+                this.y = currentCoord.y;
+            }
         }
     }
 
@@ -83,8 +93,8 @@ export class Ant {
     }
 
     paintTrail(boardContext) {
-        boardContext.strokeStyle = pheromoneTrailColor;
-        for (let point of this.pheromoneTrail) {
+        boardContext.strokeStyle = homeTrailColor;
+        for (let point of this.homeTrail) {
             boardContext.beginPath();
             boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
             boardContext.stroke();
@@ -94,7 +104,7 @@ export class Ant {
 
     foundFood(foodFactory) {
         let foodRadius = +localStorage.foodRadius;
-        for (let food of foodFactory) {
+        for (let food of foodFactory.foods) {
             if ((this.x - food.x) * (this.x - food.x) + (this.y - food.y) * (this.y - food.y) <= foodRadius * foodRadius) {
                 return true;
             }
