@@ -8,18 +8,20 @@ const boardContext = board.getContext("2d");
 resetCanvas();
 tick();
 
-async function tick() {
-  setTimeout(function onTick() {
-
-    tick()
-  }, 100);
-}
-
 function resetCanvas() {
-  board.width = boardWidth;
-  board.height = boardHeight;
-  boardContext.fillStyle = board_background;
-  boardContext.strokestyle = board_border;
-  boardContext.fillRect(0, 0, board.width, board.height);
-  boardContext.strokeRect(0, 0, board.width, board.height);
+    board.width = boardWidth;
+    board.height = boardHeight;
+    boardContext.fillStyle = board_background;
+    boardContext.strokestyle = board_border;
+    boardContext.fillRect(0, 0, board.width, board.height);
+    boardContext.strokeRect(0, 0, board.width, board.height);
 }
+
+async function tick() {
+    setTimeout(function onTick() {
+
+        tick()
+    }, 100);
+}
+
+
