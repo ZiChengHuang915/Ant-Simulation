@@ -5,14 +5,17 @@ const board_background = "white";
 
 const board = document.getElementById("board");
 const boardContext = board.getContext("2d");
-main();
+resetCanvas();
+tick();
 
-function main() {
-  clearCanvas();
-  drawSnake();
+async function tick() {
+  setTimeout(function onTick() {
+
+    tick()
+  }, 100);
 }
 
-function clearCanvas() {
+function resetCanvas() {
   board.width = boardWidth;
   board.height = boardHeight;
   boardContext.fillStyle = board_background;
