@@ -22,10 +22,10 @@ export class Colony {
     }
 
     paint(boardContext) {
-        boardContext.strokeStyle = colonyColor;
+        boardContext.fillStyle = colonyColor;
         boardContext.beginPath();
         boardContext.ellipse(this.x, this.y, colonyRadius, colonyRadius, 0, 0, 360);
-        boardContext.stroke();
+        boardContext.fill();
     }
     
     paintAnts(boardContext) {

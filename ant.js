@@ -87,18 +87,18 @@ export class Ant {
     }
 
     paintAnt(boardContext) {
-        boardContext.strokeStyle = antColor;
+        boardContext.fillStyle = antColor;
         boardContext.beginPath();
         boardContext.ellipse(this.x, this.y, antRadius, antRadius, 0, 0, 360);
-        boardContext.stroke();
+        boardContext.fill();
     }
 
     paintTrail(boardContext) {
-        boardContext.strokeStyle = homeTrailColor;
+        boardContext.fillStyle = homeTrailColor;
         for (let point of this.homeTrail) {
             boardContext.beginPath();
             boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
-            boardContext.stroke();
+            boardContext.fill();
         }
 
     }

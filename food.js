@@ -12,10 +12,10 @@ export class Food {
     }
 
     paint(boardContext) {
-        boardContext.strokeStyle = foodColor;
+        boardContext.fillStyle = foodColor;
         boardContext.beginPath();
         boardContext.ellipse(this.x, this.y, foodRadius, foodRadius, 0, 0, 360);
-        boardContext.stroke();
+        boardContext.fill();
     }
 }
 
