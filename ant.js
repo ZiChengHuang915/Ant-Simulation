@@ -106,7 +106,7 @@ export class Ant {
     foundFood(foodFactory) {
         let foodRadius = +localStorage.foodRadius;
         for (let food of foodFactory.foods) {
-            if ((this.x - food.x) * (this.x - food.x) + (this.y - food.y) * (this.y - food.y) <= foodRadius * foodRadius) {
+            if ((this.x - food.x) ** 2 + (this.y - food.y) ** 2 <= foodRadius ** 2) {
                 return true;
             }
         }

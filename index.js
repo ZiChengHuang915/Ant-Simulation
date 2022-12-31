@@ -26,7 +26,7 @@ function setup() {
 
     resetCanvas();
     colony.generateAnts();
-    foodFactory.generateFood();
+    foodFactory.generateFood(colony.x, colony.y);
     tick();
 }
 

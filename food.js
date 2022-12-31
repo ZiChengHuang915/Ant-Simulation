@@ -25,10 +25,18 @@ export class FoodFactory {
         this.foods = [];
     }
 
-    generateFood() {
+    generateFood(colonyX, colonyY) {
         this.foods = [];
         for (let i = 0; i < numFood; i++) {
-            this.foods.push(new Food(Math.random() * boardWidth, Math.random() * boardHeight));
+            let potentialX = Math.random() * boardWidth;
+            let potentialY = Math.random() * boardHeight;
+            
+            while ((potentialX - colonyX) ** 2 + (potentialY - colonyY) ** 2 <= (foodRadius + +localStorage.colonyRadius) ** 2) {
+                potentialX = Math.random() * boardWidth;
+                potentialY = Math.random() * boardHeight;
+            }
+
+            this.foods.push(new Food(potentialX, potentialY));
         }
     }
 
