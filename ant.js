@@ -5,6 +5,7 @@ const antColor = "black";
 const homeTrailColor = "blue";
 const antRadius = 3;
 const trailRadius = 1;
+const trailEvaporationRate = 0.99;
 const topSpeed = 2;
 const maxRotationAngle = 20;
 const rotationChangeChance = 0.3;
@@ -103,10 +104,15 @@ export class Ant {
     paintTrail(boardContext) {
         boardContext.fillStyle = homeTrailColor;
         for (let point of this.homeTrail) {
+            boardContext.globalAlpha *= trailEvaporationRate;
+            if (boardContext.globalAlpha < 0.1) {
+                break;
+            }
             boardContext.beginPath();
             boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
             boardContext.fill();
         }
+        boardContext.globalAlpha = 1;
     }
 
     foundFood(foodFactory) {
