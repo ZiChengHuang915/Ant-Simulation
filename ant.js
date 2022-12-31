@@ -59,6 +59,13 @@ export class Ant {
             if (this.homeTrail.length == 0) {
                 this.hasFood = false;
                 localStorage.setItem("foodForaged", `${+localStorage.foodForaged + 1}`);
+
+                if (Math.random() < 0.5) {
+                    this.dx *= -1;
+                }
+                if (Math.random() < 0.5) {
+                    this.dy *= -1;
+                }
             } else {
                 let currentCoord = this.homeTrail.pop();
                 this.x = currentCoord.x;
@@ -100,7 +107,6 @@ export class Ant {
             boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
             boardContext.fill();
         }
-
     }
 
     foundFood(foodFactory) {
