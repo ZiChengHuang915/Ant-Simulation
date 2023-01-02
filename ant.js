@@ -3,9 +3,9 @@ import { degreesToRad } from "./util.js";
 
 const antColor = "black";
 const homeTrailColor = "blue";
-const antRadius = 3;
+const antRadius = 10;
 const trailRadius = 1;
-const trailEvaporationRate = 0.99;
+const trailEvaporationRate = 0.95;
 const topSpeed = 2;
 const maxRotationAngle = 20;
 const rotationChangeChance = 0.3;
@@ -117,13 +117,13 @@ export class Ant {
 
     paintTrail(boardContext) {
         boardContext.fillStyle = homeTrailColor;
-        for (let point of this.homeTrail) {
+        for (let i = this.homeTrail.length - 1; i >= 0; i--) {
             boardContext.globalAlpha *= trailEvaporationRate;
             if (boardContext.globalAlpha < 0.1) {
                 break;
             }
             boardContext.beginPath();
-            boardContext.ellipse(point.x, point.y, trailRadius, trailRadius, 0, 0, 360);
+            boardContext.ellipse(this.homeTrail[i].x, this.homeTrail[i].y, trailRadius, trailRadius, 0, 0, 360);
             boardContext.fill();
         }
         boardContext.globalAlpha = 1;
