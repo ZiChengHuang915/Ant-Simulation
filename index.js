@@ -60,7 +60,10 @@ function tick() {
 }
 
 export function updateScore() {
-    document.getElementById("score").innerHTML = localStorage.foodForaged;
+    boardContext.font = "20px Arial";
+    boardContext.fillStyle = "black";
+    boardContext.textAlign = "center";
+    boardContext.fillText(localStorage.foodForaged, colony.x, colony.y + 8);
 }
 
 function resetPheromoneTable() {
