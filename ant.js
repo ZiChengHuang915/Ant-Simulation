@@ -10,8 +10,8 @@ const trailEvaporationRate = 0.95;
 const topSpeed = 2;
 const maxRotationAngle = 20;
 const rotationChangeChance = 0.3;
-const exploreChance = 0.05;
-const findHomeChance = 0.2;
+const exploreChance = 0.1;
+const findHomeChance = 0.1;
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 

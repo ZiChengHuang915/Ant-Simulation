@@ -8,7 +8,7 @@ let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
 export class Colony {
-    constructor(x = Math.random() * boardWidth, y = Math.random() * boardHeight) {
+    constructor(x = boardWidth / 2, y = boardHeight / 2) {
         this.x = x;
         this.y = y;
         let ants = [];
