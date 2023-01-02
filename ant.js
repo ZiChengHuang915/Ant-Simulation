@@ -85,7 +85,7 @@ export class Ant {
         }
     }
 
-    updateMovement(foodFactory, boardContext, colonyX, colonyY) {
+    updateMovement(foodFactory, boardContext, colony, food) {
         if (this.foundFood(foodFactory)) {
             this.hasFood = true;
 
@@ -108,6 +108,16 @@ export class Ant {
                 this.dx *= -1;
             } else if (this.y > boardHeight || this.y < 0) {
                 this.dy *= -1;
+            }
+
+            // this will break for more than 1 food fix later
+            if (distSq(this.x, this.y, food.x, food.y) < (+localStorage.foodRadius + detectionRadius * 3) ** 2) {
+                let toFoodX = food.x - this.x;
+                let toFoodY = food.y - this.y;
+
+                let magnitude = Math.sqrt(toFoodX ** 2 + toFoodY ** 2);
+                this.dx = toFoodX / magnitude * topSpeed;
+                this.dy = toFoodY / magnitude * topSpeed;
             }
 
             if (Math.random() < exploreChance) {
@@ -140,7 +150,7 @@ export class Ant {
                 this.homeTrail = [];
             }
 
-            if (distSq(this.x, this.y, colonyX, colonyY) < (+localStorage.colonyRadius) ** 2) {
+            if (distSq(this.x, this.y, colony.x, colony.y) < (+localStorage.colonyRadius) ** 2) {
                 this.hasFood = false;
                 localStorage.setItem("foodForaged", `${+localStorage.foodForaged + 1}`);
 
@@ -148,14 +158,14 @@ export class Ant {
                 this.dy *= -1;
             } else {
                 if (Math.random() < findHomeChance) {
-                    let toColonyX = colonyX - this.x;
-                    let toColonyY = colonyY - this.y;
-    
+                    let toColonyX = colony.x - this.x;
+                    let toColonyY = colony.y - this.y;
+
                     let magnitude = Math.sqrt(toColonyX ** 2 + toColonyY ** 2);
                     this.dx = toColonyX / magnitude * topSpeed;
                     this.dy = toColonyY / magnitude * topSpeed;
                 }
-                
+
                 this.changeRotationAngle();
                 this.updatePosition();
             }

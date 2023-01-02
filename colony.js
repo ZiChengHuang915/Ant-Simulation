@@ -38,9 +38,9 @@ export class Colony {
         }
     }
     
-    updatePositions(foodFactory, boardContext, colonyX, colonyY) {
+    updatePositions(foodFactory, boardContext, colony, food) {
         for (let ant of this.ants) {
-            ant.updateMovement(foodFactory, boardContext, colonyX, colonyY);
+            ant.updateMovement(foodFactory, boardContext, colony, food);
         }
     }
 }
