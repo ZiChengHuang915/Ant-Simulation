@@ -1,4 +1,4 @@
-import { FoodFactory } from "./food.js";
+import { pheromoneTable } from "./index.js";
 import { degreesToRad } from "./util.js";
 
 const antColor = "black";
@@ -56,6 +56,20 @@ export class Ant {
             this.updatePosition();
         } else {
             // should return home with food
+
+            let nearestX = Math.round(this.x);
+            let nearestY = Math.round(this.y);
+            if (nearestX < 0) {
+                nearestX = 0;
+            } else if (nearestX >= boardWidth) {
+                nearestX = boardWidth - 1;
+            }
+            if (nearestY < 0) {
+                nearestY = 0;
+            } else if (nearestY >= boardHeight) {
+                nearestY = boardHeight - 1;
+            }
+            pheromoneTable.pheromoneLevel[nearestX][nearestY] = 1;
 
             if (this.homeTrail.length == 0) {
                 this.hasFood = false;

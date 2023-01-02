@@ -1,6 +1,6 @@
 import { Ant } from "./ant.js";
 
-const numAnts = 20;
+const numAnts = 10;
 localStorage.setItem("colonyRadius", "30");
 const colonyRadius = +localStorage.colonyRadius;
 const colonyColor = "brown";
