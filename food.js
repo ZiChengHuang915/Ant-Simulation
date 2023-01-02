@@ -2,7 +2,7 @@ let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
 const foodColor = "green";
-localStorage.setItem("foodRadius", "200");
+localStorage.setItem("foodRadius", "20");
 let foodRadius = +localStorage.foodRadius;
 
 export class Food {

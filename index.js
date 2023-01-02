@@ -2,8 +2,8 @@ import { Colony } from "./colony.js";
 import { FoodFactory } from "./food.js";
 
 const fps = 60;
-localStorage.setItem("boardWidth", "800");
-localStorage.setItem("boardHeight", "800");
+localStorage.setItem("boardWidth", "400");
+localStorage.setItem("boardHeight", "400");
 localStorage.setItem("foodForaged", "0");
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
@@ -48,7 +48,7 @@ function tick() {
     setTimeout(function onTick() {
         resetCanvas();
         colony.paint(boardContext);
-        colony.updatePositions(foodFactory);
+        colony.updatePositions(foodFactory, boardContext, colony.x, colony.y);
         colony.paintAnts(boardContext);
         foodFactory.paintFoods(boardContext);
         updateScore();

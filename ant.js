@@ -1,14 +1,17 @@
 import { pheromoneTable } from "./index.js";
-import { degreesToRad } from "./util.js";
+import { degreesToRad, distSq } from "./util.js";
 
 const antColor = "black";
 const homeTrailColor = "blue";
 const antRadius = 10;
 const trailRadius = 1;
+const detectionRadius = 10;
 const trailEvaporationRate = 0.95;
 const topSpeed = 2;
 const maxRotationAngle = 20;
 const rotationChangeChance = 0.3;
+const exploreChance = 0.05;
+const findHomeChance = 0.2;
 let boardWidth = +localStorage.boardWidth;
 let boardHeight = +localStorage.boardHeight;
 
@@ -31,9 +34,64 @@ export class Ant {
         this.hasFood = false;
     }
 
-    updateMovement(foodFactory) {
+    calculateRotationOffset(boardContext) {
+        let magnitude = Math.sqrt(this.dx ** 2 + this.dy ** 2);
+        let normalizedDx = this.dx / magnitude;
+        let normalizedDy = this.dy / magnitude;
+
+        let straightX = this.x + normalizedDx * (detectionRadius * 2);
+        let straightY = this.y + normalizedDy * (detectionRadius * 2);
+        let rightX = this.x + (normalizedDx * Math.cos(degreesToRad(45)) - normalizedDy * Math.sin(degreesToRad(45))) * (detectionRadius * 2);
+        let rightY = this.y + (normalizedDx * Math.sin(degreesToRad(45)) + normalizedDy * Math.cos(degreesToRad(45))) * (detectionRadius * 2);
+        let leftX = this.x + (normalizedDx * Math.cos(degreesToRad(-45)) - normalizedDy * Math.sin(degreesToRad(-45))) * (detectionRadius * 2);
+        let leftY = this.y + (normalizedDx * Math.sin(degreesToRad(-45)) + normalizedDy * Math.cos(degreesToRad(-45))) * (detectionRadius * 2);
+
+        // debug
+        // boardContext.strokeStyle = antColor;
+        // boardContext.beginPath();
+        // boardContext.ellipse(straightX, straightY, detectionRadius, detectionRadius, 0, 0, 360);
+        // boardContext.ellipse(leftX, leftY, detectionRadius, detectionRadius, 0, 0, 360);
+        // boardContext.ellipse(rightX, rightY, detectionRadius, detectionRadius, 0, 0, 360);
+        // boardContext.stroke();
+        // boardContext.strokeRect(this.x - 3 * detectionRadius, this.y - 3 * detectionRadius, 6 * detectionRadius, 6 * detectionRadius);
+
+        let pheromoneSumStraight = 0;
+        let pheromoneSumRight = 0;
+        let pheromoneSumLeft = 0;
+        for (let i = Math.round(this.x - detectionRadius * 3); i < this.x + detectionRadius * 3; i++) {
+            for (let j = Math.round(this.y - detectionRadius * 3); j < this.y + detectionRadius * 3; j++) {
+                if (i >= boardWidth || i < 0 || j >= boardHeight || j < 0) {
+                    continue;
+                }
+
+                if (distSq(i, j, straightX, straightY) < detectionRadius ** 2) {
+                    pheromoneSumStraight += pheromoneTable.pheromoneLevel[i][j];
+                }
+                if (distSq(i, j, rightX, rightY) < detectionRadius ** 2) {
+                    pheromoneSumRight += pheromoneTable.pheromoneLevel[i][j];
+                }
+                if (distSq(i, j, leftX, leftY) < detectionRadius ** 2) {
+                    pheromoneSumLeft += pheromoneTable.pheromoneLevel[i][j];
+                }
+            }
+        }
+
+        if (Math.max(pheromoneSumStraight, pheromoneSumRight, pheromoneSumLeft) == pheromoneSumStraight) {
+            return 0;
+        } else if (Math.max(pheromoneSumStraight, pheromoneSumRight, pheromoneSumLeft) == pheromoneSumLeft) {
+            return -maxRotationAngle;
+        } else {
+            return maxRotationAngle;
+        }
+    }
+
+    updateMovement(foodFactory, boardContext, colonyX, colonyY) {
         if (this.foundFood(foodFactory)) {
             this.hasFood = true;
+
+            this.dx *= -1;
+            this.dy *= -1;
+            this.updatePosition();
         }
 
         if (!this.hasFood) {
@@ -52,8 +110,14 @@ export class Ant {
                 this.dy *= -1;
             }
 
-            this.changeRotationAngle();
-            this.updatePosition();
+            if (Math.random() < exploreChance) {
+                this.changeRotationAngle();
+                this.updatePosition();
+            } else {
+                let rotationOffset = this.calculateRotationOffset(boardContext);
+                this.changeRotationAngle(false, rotationOffset);
+                this.updatePosition();
+            }
         } else {
             // should return home with food
 
@@ -69,22 +133,31 @@ export class Ant {
             } else if (nearestY >= boardHeight) {
                 nearestY = boardHeight - 1;
             }
+
             pheromoneTable.pheromoneLevel[nearestX][nearestY] = 1;
 
-            if (this.homeTrail.length == 0) {
+            if (this.homeTrail.length != 0) {
+                this.homeTrail = [];
+            }
+
+            if (distSq(this.x, this.y, colonyX, colonyY) < (+localStorage.colonyRadius) ** 2) {
                 this.hasFood = false;
                 localStorage.setItem("foodForaged", `${+localStorage.foodForaged + 1}`);
 
-                if (Math.random() < 0.5) {
-                    this.dx *= -1;
-                }
-                if (Math.random() < 0.5) {
-                    this.dy *= -1;
-                }
+                this.dx *= -1;
+                this.dy *= -1;
             } else {
-                let currentCoord = this.homeTrail.pop();
-                this.x = currentCoord.x;
-                this.y = currentCoord.y;
+                if (Math.random() < findHomeChance) {
+                    let toColonyX = colonyX - this.x;
+                    let toColonyY = colonyY - this.y;
+    
+                    let magnitude = Math.sqrt(toColonyX ** 2 + toColonyY ** 2);
+                    this.dx = toColonyX / magnitude * topSpeed;
+                    this.dy = toColonyY / magnitude * topSpeed;
+                }
+                
+                this.changeRotationAngle();
+                this.updatePosition();
             }
         }
     }
@@ -94,9 +167,9 @@ export class Ant {
         this.y += this.dy;
     }
 
-    changeRotationAngle(forceChange = false) {
+    changeRotationAngle(forceChange = false, offset = 0) {
         if (Math.random() < rotationChangeChance || forceChange) {
-            this.rotationAngle = Math.random() * degreesToRad(maxRotationAngle * 2) - degreesToRad(maxRotationAngle * 2) / 2;
+            this.rotationAngle = offset + Math.random() * degreesToRad(maxRotationAngle * 2) - degreesToRad(maxRotationAngle * 2) / 2;
             this.rotateVelocity();
         }
     }

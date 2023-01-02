@@ -31,13 +31,16 @@ export class Colony {
     paintAnts(boardContext) {
         for (let ant of this.ants) {
             ant.paintAnt(boardContext);
-            ant.paintTrail(boardContext);
+
+            if (!ant.hasFood) {
+                ant.paintTrail(boardContext);
+            }
         }
     }
     
-    updatePositions(foodFactory) {
+    updatePositions(foodFactory, boardContext, colonyX, colonyY) {
         for (let ant of this.ants) {
-            ant.updateMovement(foodFactory);
+            ant.updateMovement(foodFactory, boardContext, colonyX, colonyY);
         }
     }
 }
