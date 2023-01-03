@@ -1,6 +1,6 @@
 # Ant-Simulation
 
-This is inspired by a project made by Sebastian Lague: [Coding Adventure: Ant and Slime Simulations](https://www.youtube.com/watch?v=X-iSQQgOd1A&t=322s&ab_channel=SebastianLague).
+This is inspired by a project made by Sebastian Lague: [Coding Adventure: Ant and Slime Simulations](https://www.youtube.com/watch?v=X-iSQQgOd1A&t=322s&ab_channel=SebastianLague). Check it out [here](https://zichenghuang915.github.io/Ant-Simulation/index.html).
 
 ![Demo](./images/demo.gif)
 
