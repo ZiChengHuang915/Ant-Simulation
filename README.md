@@ -2,10 +2,7 @@
 
 This is inspired by a project made by Sebastian Lague: [Coding Adventure: Ant and Slime Simulations](https://www.youtube.com/watch?v=X-iSQQgOd1A&t=322s&ab_channel=SebastianLague).
 
-<video controls autoplay muted>
-  <source src="./images/demo.mp4" type="video/mp4">
-  ERROR: Could not play video.
-</video>
+![Demo](./images/demo.gif)
 
 The simulation follows several heuristics: 
 
